@@ -1,84 +1,65 @@
-// Inicializar el objeto speechSynthesis
-const synth = window.speechSynthesis;
+const hablarBtn = document.getElementById('hablar');
+const detenerBtn = document.getElementById('detener');
+const pausarBtn = document.getElementById('pausar');
+const textoArea = document.getElementById('texto');
+let voicesCargadas = false;
 
-// Obtener los elementos del DOM
-const hablarBtn = document.querySelector('#hablar');
-const pausarBtn = document.querySelector('#pausar');
-const detenerBtn = document.querySelector('#detener');
-const inputForm = document.querySelector("form");
-const inputTxt = document.querySelector("textarea");
-const voiceSelect = document.querySelector("select");
 
-/*// Definir la función de hablar
-const hablar = () => {
-  // Verificar si ya se está hablando
-  if (synth.speaking) {
-    console.error('Ya se está reproduciendo un texto');
-    return;
+const utterance = new SpeechSynthesisUtterance();
+let voices = [];
+let paused = false;
+
+function obtenerVoces() {
+    voices = speechSynthesis.getVoices();
+    for (let i = 0; i < voices.length; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+      document.getElementById('voices').appendChild(option);
+    }
+    voicesCargadas = true;
   }
+  
 
-  // Obtener el texto a convertir en voz
-  const texto = new SpeechSynthesisUtterance(inputTxt.value);
+function iniciar() {
+  if ('speechSynthesis' in window) {
+    obtenerVoces();
+    speechSynthesis.addEventListener('voiceschanged', obtenerVoces);
+  } else {
+    console.log('La API de SpeechSynthesis no está disponible en este navegador.');
+  }
+}
 
-  // Definir la voz a utilizar (en este caso, la voz por defecto)
-  const voces = synth.getVoices();
-  texto.voice = voces[0];
+document.getElementById('voices').addEventListener('change', () => {
+  utterance.voice = voices[document.getElementById('voices').value];
+});
 
-  // Definir la velocidad y el tono de la voz
-  texto.rate = 1;
-  texto.pitch = 1;
+function convertirTextoAVoz() {
+    utterance.text = textoArea.value;
+    if (paused) {
+      speechSynthesis.resume();
+    } else {
+      if (voicesCargadas) {
+        speechSynthesis.speak(utterance);
+      } else {
+        console.log('Las voces aún no se han cargado. Por favor, espere unos segundos e inténtelo de nuevo.');
+      }
+    }
+  }
+  
 
-  // Reproducir el texto en voz
-  synth.speak(texto);
-};*/
+function pausar() {
+  speechSynthesis.pause();
+  paused = true;
+}
 
-// Definir la función de pausar
-const pausar = () => {
-  synth.pause();
-};
+function detener() {
+  speechSynthesis.cancel();
+  paused = false;
+}
 
-// Definir la función de detener
-const detener = () => {
-  synth.cancel();
-};
-
-// Agregar los event listeners a los botones
-hablarBtn.addEventListener('click', hablar);
+hablarBtn.addEventListener('click', convertirTextoAVoz);
 pausarBtn.addEventListener('click', pausar);
 detenerBtn.addEventListener('click', detener);
 
-
-/**************************** */
-
-function populateVoiceList() {
-  voices = synth.getVoices();
-
-  for (const voice of voices) {
-    const option = document.createElement("option");
-    option.textContent = `${voice.name} (${voice.lang})`;
-
-    if (voice.default) {
-      option.textContent += " — DEFAULT";
-    }
-
-    option.setAttribute("data-lang", voice.lang);
-    option.setAttribute("data-name", voice.name);
-    voiceSelect.appendChild(option);
-  }
-}
-
-populateVoiceList();
-if (speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-
-inputForm.onsubmit = (event) => {
-  event.preventDefault();
-
-  const utterThis = new SpeechSynthesisUtterance(inputTxt.value);
-  const selectedOption =
-    voiceSelect.selectedOptions[0].getAttribute("data-name");
-  utterThis.voice = voices.find((v) => v.name === selectedOption);
-  synth.speak(utterThis);
-  inputTxt.blur();
-};
+window.addEventListener('load', iniciar);

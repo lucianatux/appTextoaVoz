@@ -5,18 +5,3 @@ textarea	{
     font-family:	sans-serif;
     margin-bottom:	20px;
 }
-button	{
-    font-size:	18px;
-    font-family:	sans-serif;
-    padding:	10px	20px;
-    border:	none;
-    background-color:	#333;
-    color:	#fff;
-    cursor:	pointer;
-}
-button:hover	{
-    background-color:	#555;
-}
-button:active	{
-    background-color:	#777;
-}
