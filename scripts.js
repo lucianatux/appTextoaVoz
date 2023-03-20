@@ -2,12 +2,14 @@
 const synth = window.speechSynthesis;
 
 // Obtener los elementos del DOM
-const textoInput = document.querySelector('#texto');
 const hablarBtn = document.querySelector('#hablar');
 const pausarBtn = document.querySelector('#pausar');
 const detenerBtn = document.querySelector('#detener');
+const inputForm = document.querySelector("form");
+const inputTxt = document.querySelector("textarea");
+const voiceSelect = document.querySelector("select");
 
-// Definir la función de hablar
+/*// Definir la función de hablar
 const hablar = () => {
   // Verificar si ya se está hablando
   if (synth.speaking) {
@@ -16,7 +18,7 @@ const hablar = () => {
   }
 
   // Obtener el texto a convertir en voz
-  const texto = new SpeechSynthesisUtterance(textoInput.value);
+  const texto = new SpeechSynthesisUtterance(inputTxt.value);
 
   // Definir la voz a utilizar (en este caso, la voz por defecto)
   const voces = synth.getVoices();
@@ -28,7 +30,7 @@ const hablar = () => {
 
   // Reproducir el texto en voz
   synth.speak(texto);
-};
+};*/
 
 // Definir la función de pausar
 const pausar = () => {
@@ -47,10 +49,6 @@ detenerBtn.addEventListener('click', detener);
 
 
 /**************************** */
-
-const inputForm = document.querySelector("form");
-const inputTxt = document.querySelector("textarea");
-const voiceSelect = document.querySelector("select");
 
 function populateVoiceList() {
   voices = synth.getVoices();
