@@ -1,3 +1,4 @@
+
 const hablarBtn = document.getElementById('hablar');
 const detenerBtn = document.getElementById('detener');
 const pausarBtn = document.getElementById('pausar');
@@ -7,7 +8,15 @@ let voicesCargadas = false;
 
 const utterance = new SpeechSynthesisUtterance();
 let voices = [];
-let paused = false;
+let estado = 'detenido';
+
+utterance.onpause = () => {
+    estado = 'pausado';
+  };
+  utterance.onend = () => {
+    estado = 'detenido';
+  };
+  
 
 function obtenerVoces() {
     voices = speechSynthesis.getVoices();
@@ -36,16 +45,14 @@ document.getElementById('voices').addEventListener('change', () => {
 
 function convertirTextoAVoz() {
     utterance.text = textoArea.value;
-    if (paused) {
+    if (estado === 'pausado') {
       speechSynthesis.resume();
     } else {
-      if (voicesCargadas) {
-        speechSynthesis.speak(utterance);
-      } else {
-        console.log('Las voces aún no se han cargado. Por favor, espere unos segundos e inténtelo de nuevo.');
-      }
+      speechSynthesis.speak(utterance);
     }
+    estado = 'hablando';
   }
+  
   
 
 function pausar() {
@@ -62,4 +69,4 @@ hablarBtn.addEventListener('click', convertirTextoAVoz);
 pausarBtn.addEventListener('click', pausar);
 detenerBtn.addEventListener('click', detener);
 
-window.addEventListener('load', iniciar);
+window.addEventListener('load', iniciar)
