@@ -51,6 +51,7 @@ function convertirTextoAVoz() {
       speechSynthesis.speak(utterance);
     }
     estado = 'hablando';
+    console.log('Reproduciendo...');
   }
   
   
@@ -58,11 +59,15 @@ function convertirTextoAVoz() {
 function pausar() {
   speechSynthesis.pause();
   paused = true;
+  estado = 'pausado';
+  console.log('Pausado...');
 }
 
 function detener() {
   speechSynthesis.cancel();
   paused = false;
+  estado = 'detenido';
+  console.log('Detenido...');
 }
 
 hablarBtn.addEventListener('click', convertirTextoAVoz);
