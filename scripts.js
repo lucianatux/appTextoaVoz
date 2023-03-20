@@ -49,7 +49,7 @@ detenerBtn.addEventListener('click', detener);
 /**************************** */
 
 const inputForm = document.querySelector("form");
-const inputTxt = document.querySelector("input");
+const inputTxt = document.querySelector("textarea");
 const voiceSelect = document.querySelector("select");
 
 function populateVoiceList() {
