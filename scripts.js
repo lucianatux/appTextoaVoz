@@ -1,4 +1,5 @@
 
+
 const hablarBtn = document.getElementById('hablar');
 const detenerBtn = document.getElementById('detener');
 const pausarBtn = document.getElementById('pausar');
@@ -28,6 +29,8 @@ function obtenerVoces() {
     }
     voicesCargadas = true;
   }
+
+  obtenerVoces();
   
 
 function iniciar() {
